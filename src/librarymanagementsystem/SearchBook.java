@@ -12,7 +12,7 @@ class BookSearch {
 
     // Constructor with parameter BookCollection
     public BookSearch(BookCollection bookCollection) {
-        this.root = bookCollection.getFirst();
+        this.root = bookCollection.getFirstBook();
         // Insert all books from the collection into the binary tree using loop
         for (int i = 2; i <= bookCollection.size(); i++) {
             insertRec(root, bookCollection.getBook(i));
