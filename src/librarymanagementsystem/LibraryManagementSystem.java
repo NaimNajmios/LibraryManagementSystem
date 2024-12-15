@@ -25,7 +25,6 @@ public class LibraryManagementSystem {
         Book objBook5 = new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780439136365");
         Book objBook6 = new Book("The Hobbit", "J.R.R. Tolkien", "9780439136365");
         Book objBook7 = new Book("The Alchemist", "Paulo Coelho", "9780061122415");
-        Book objBook8 = new Book("The Hobbit", "J.R.R. Tolkien", "9780439136365");
 
         bookCollection.addFirst(objBook);
         bookCollection.addFirst(objBook2);
@@ -34,7 +33,6 @@ public class LibraryManagementSystem {
         bookCollection.addFirst(objBook5);
         bookCollection.addFirst(objBook6);
         bookCollection.addFirst(objBook7);
-        bookCollection.addFirst(objBook8);
 
     }
 
@@ -56,6 +54,9 @@ public class LibraryManagementSystem {
                     break;
                 case 2:
                     handleBorrowMenu();
+                    break;
+                case 3:
+                    handleSortedBookCollectionMenu();
                     break;
                 case 7:
                     running = false;
@@ -132,6 +133,26 @@ public class LibraryManagementSystem {
         }
     }
 
+    public void handleSortedBookCollectionMenu() {
+        boolean inSortedBookMenu = true;
+        while (inSortedBookMenu) {
+            printSortedBookCollectionMenu();
+            int sortedChoice = getIntInput("Enter your choice: ");
+
+            switch (sortedChoice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    inSortedBookMenu = false; // Return to main menu
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
     private void printWelcomeMessage() {
         System.out.println("------------------------------------------------");
         System.out.println("Welcome to the Library Management System");
@@ -144,6 +165,7 @@ public class LibraryManagementSystem {
         System.out.println("Main Menu:");
         System.out.println("1. Manage Book Collection");
         System.out.println("2. Borrow & Return system");
+        System.out.println("3. Sorted Display Book Collection");
         System.out.println("7. Exit");
         System.out.println();
     }
@@ -166,6 +188,15 @@ public class LibraryManagementSystem {
         System.out.println("3. Display Borrowing Requests");
         System.out.println("4. Display Return Requests");
         System.out.println("5. Main Menu");
+        System.out.println();
+    }
+
+    private void printSortedBookCollectionMenu() {
+        System.out.println();
+        System.out.println("Sorted Book Collection Menu:");
+        System.out.println("1. Quick Sort");
+        System.out.println("2. Merge Sort");
+        System.out.println("3. Main Menu");
         System.out.println();
     }
 

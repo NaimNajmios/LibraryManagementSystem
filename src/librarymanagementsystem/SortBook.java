@@ -24,6 +24,12 @@ public class SortBook {
         }
     }
 
+    // Method to sort a linked list using bubble sort, return book collection
+    public static BookCollection collectionBubbleSort(BookCollection collection) {
+        bubbleSort(collection);
+        return collection;
+    }
+
     // Method to sort a linked list using quick sort
     public static void quickSort(BookCollection collection, int low, int high) {
         if (low < high) {
@@ -131,7 +137,7 @@ public class SortBook {
      * Continues until one of the lists becomes empty.
      * Appends the remaining nodes of the non-empty list to the merged list.
      */
-    
+
     private static Book merge(Book left, Book right) {
         Book dummyHead = new Book();
         Book tail = dummyHead;
@@ -146,9 +152,7 @@ public class SortBook {
             }
             tail = tail.right;
         }
-
         tail.right = left != null ? left : right;
-
         return dummyHead.right;
     }
 }
