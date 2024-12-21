@@ -4,8 +4,8 @@ class BookSearch {
 
     // Instatiate book object
     private Book root;
-    
-    // Constructor 
+
+    // Constructor
     public BookSearch() {
         this.root = null;
     }
@@ -19,78 +19,74 @@ class BookSearch {
         }
     }
 
-    public void insertRec(Book book){
+    public void insertRec(Book book) {
         root = insertRec(root, book);
     }
 
-
-    //Insert book collection using node
-    private Book insertRec(Book currentNode,Book newBook){
-        if(currentNode == null){
+    // Insert book collection using node
+    private Book insertRec(Book currentNode, Book newBook) {
+        if (currentNode == null) {
             return newBook;
         }
-        //Compare isbn value
-        if(newBook.getIsbn().compareTo(currentNode.getIsbn()) < 0){
+        // Compare isbn value
+        if (newBook.getIsbn().compareTo(currentNode.getIsbn()) < 0) {
             currentNode.left = insertRec(currentNode.left, newBook);
-        }else if(newBook.getIsbn().compareTo(currentNode.getIsbn()) > 0){
+        } else if (newBook.getIsbn().compareTo(currentNode.getIsbn()) > 0) {
             currentNode.right = insertRec(currentNode.right, newBook);
         }
         return currentNode;
     }
-    
 
     // Seacrh by isbn
-    public Book searchISBN(String isbn){
+    public Book searchISBN(String isbn) {
         return searchISBN(root, isbn);
     }
 
-    private Book searchISBN(Book root, String isbn){
-        if(root == null || root.getIsbn().equals(isbn)){
+    private Book searchISBN(Book root, String isbn) {
+        if (root == null || root.getIsbn().equals(isbn)) {
             return root;
         }
-        if(isbn.compareTo(root.getIsbn()) < 0){
+        if (isbn.compareTo(root.getIsbn()) < 0) {
             return searchISBN(root.left, isbn);
         }
         return searchISBN(root.right, isbn);
     }
 
-
-    //Search by title
-    public Book searchTitle(String title){
+    // Search by title
+    public Book searchTitle(String title) {
         return searchTitle(root, title);
     }
 
-    private Book searchTitle(Book root, String title){
-        if(root == null){
+    private Book searchTitle(Book root, String title) {
+        if (root == null) {
             return null;
         }
-        if(root.getTitle().equals(title)){
+        if (root.getTitle().equals(title)) {
             return root;
         }
 
         Book leftSearch = searchTitle(root.left, title);
-        if(leftSearch != null){
+        if (leftSearch != null) {
             return leftSearch;
         }
         return searchTitle(root.right, title);
     }
 
-
-    //Search by author
-    public Book searchAuthor(String author){
+    // Search by author
+    public Book searchAuthor(String author) {
         return searchAuthor(root, author);
     }
 
-    private Book searchAuthor(Book root, String author){
-        if(root == null){
+    private Book searchAuthor(Book root, String author) {
+        if (root == null) {
             return null;
         }
-        if(root.getAuthor().equals(author)){
+        if (root.getAuthor().equals(author)) {
             return root;
         }
 
         Book leftSearch = searchAuthor(root.left, author);
-        if(leftSearch != null){
+        if (leftSearch != null) {
             return leftSearch;
         }
 
@@ -105,11 +101,13 @@ class BookSearch {
     private void printInOrderRec(Book currentNode) {
         if (currentNode != null) {
             printInOrderRec(currentNode.left); // Traverse left subtree
-            System.out.println("ISBN: " + currentNode.getIsbn() + 
-                                ", Title: " + currentNode.getTitle() + 
-                                ", Author: " + currentNode.getAuthor());
+            System.out.println("ISBN: " + currentNode.getIsbn() +
+                    ", Title: " + currentNode.getTitle() +
+                    ", Author: " + currentNode.getAuthor());
             printInOrderRec(currentNode.right); // Traverse right subtree
+        } else {
+            return;
         }
     }
-    
-}  
+
+}

@@ -8,6 +8,7 @@ public class LibraryManagementSystem {
 
     private final BookCollection bookCollection;
     private final BorrowReturnSystem borrowReturnSystem;
+    private final BookSearch searcher;
     private final Scanner scanner;
 
     public LibraryManagementSystem() {
@@ -15,6 +16,7 @@ public class LibraryManagementSystem {
         borrowReturnSystem = new BorrowReturnSystem();
         scanner = new Scanner(System.in);
         initializeBooks();
+        searcher = new BookSearch(bookCollection);
     }
 
     private void initializeBooks() {
@@ -54,10 +56,14 @@ public class LibraryManagementSystem {
                     handleBookCollectionMenu();
                     break;
                 case 2:
-                    handleBorrowMenu();
+                    handleSearchBookMenu();
                     break;
                 case 3:
+                    handleBorrowMenu();
+                    break;
+                case 4:
                     handleSortMenu();
+                    break;
                 case 7:
                     running = false;
                     break;
@@ -156,6 +162,62 @@ public class LibraryManagementSystem {
         }
     }
 
+    // Handle search book menu
+    private void handleSearchBookMenu() {
+        boolean inSearchMenu = true;
+        while (inSearchMenu) {
+            printSearchBookMenu();
+            int searchChoice = getIntInput("Enter your choice: ");
+            switch (searchChoice) {
+                case 1:
+                    searchBookByISBN();
+                    break;
+                case 2:
+                    searchBookByTitle();
+                    break;
+                case 3:
+                    searchBookByAuthor();
+                    break;
+                case 4:
+                    inSearchMenu = false; // Return to main menu
+                    break;
+            }
+        }
+    }
+
+    // Handle search book menu by ISBN
+    private void searchBookByISBN() {
+        String isbn = scanner.nextLine();
+        Book book = searcher.searchISBN(isbn);
+        if (book != null) {
+            System.out.println("Book found: " + book.toString());
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
+    // Handle search book menu by title
+    private void searchBookByTitle() {
+        String title = scanner.nextLine();
+        Book book = searcher.searchTitle(title);
+        if (book != null) {
+            System.out.println("Book found: " + book.toString());
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
+    // Handle search book menu by author
+    private void searchBookByAuthor() {
+        String author = scanner.nextLine();
+        Book book = searcher.searchAuthor(author);
+        if (book != null) {
+            System.out.println("Book found: " + book.toString());
+        } else {
+            System.out.println("Book not found.");
+        }
+    }
+
     private void quickSortBooks() {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
@@ -198,16 +260,6 @@ public class LibraryManagementSystem {
         }
     }
 
-    private void printSortMenu() {
-        System.out.println();
-        System.out.println("Sort Menu:");
-        System.out.println("1. Quick Sort");
-        System.out.println("2. Bubble Sort");
-        System.out.println("3. Merge Sort");
-        System.out.println("4. Back to Main Menu");
-        System.out.println();
-    }
-
     private void printWelcomeMessage() {
         System.out.println("------------------------------------------------");
         System.out.println("Welcome to the Library Management System");
@@ -219,9 +271,20 @@ public class LibraryManagementSystem {
         System.out.println();
         System.out.println("Main Menu:");
         System.out.println("1. Manage Book Collection");
-        System.out.println("2. Borrow & Return system");
-        System.out.println("3. Sort Book");
+        System.out.println("2. Search Book");
+        System.out.println("3. Borrow & Return system");
+        System.out.println("4. Sort Book");
         System.out.println("7. Exit");
+        System.out.println();
+    }
+
+    private void printSortMenu() {
+        System.out.println();
+        System.out.println("Sort Menu:");
+        System.out.println("1. Quick Sort");
+        System.out.println("2. Bubble Sort");
+        System.out.println("3. Merge Sort");
+        System.out.println("4. Back to Main Menu");
         System.out.println();
     }
 
@@ -246,6 +309,16 @@ public class LibraryManagementSystem {
         System.out.println();
     }
 
+    private void printSearchBookMenu() {
+        System.out.println();
+        System.out.println("Search Book Menu:");
+        System.out.println("1. Search by ISBN");
+        System.out.println("2. Search by Title");
+        System.out.println("3. Search by Author");
+        System.out.println("4. Main Menu");
+        System.out.println();
+    }
+
     private void addBook() {
         System.out.println("Enter book details:");
         String title = getStringInput("Title: ");
@@ -262,6 +335,8 @@ public class LibraryManagementSystem {
             return;
         }
         String userName = getStringInput("Enter user name: ");
+        // Display book collection
+        bookCollection.printList();
         int position = getIntInput("Enter book position: ");
         Book book = bookCollection.getBook(position);
         if (book != null) {
@@ -278,6 +353,8 @@ public class LibraryManagementSystem {
             return;
         }
         String userName = getStringInput("Enter user name: ");
+        // Display book collection
+        bookCollection.printList();
         int position = getIntInput("Enter book position: ");
         Book book = bookCollection.getBook(position);
         if (book != null) {
