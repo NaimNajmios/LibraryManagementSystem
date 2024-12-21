@@ -99,18 +99,6 @@ public class LibraryManagementSystem {
         }
     }
 
-    private void deleteBook() {
-        bookCollection.printList();
-        if (!bookCollection.isEmpty()) { // Check if the collection is not empty
-            System.out.println("Enter the position of the book you want to delete: ");
-            bookCollection.deleteFirst();
-        }
-    }
-
-    private boolean isBookCollectionEmpty() {
-        return bookCollection.isEmpty();
-    }
-
     private void handleBorrowMenu() {
         boolean inBorrowMenu = true;
         while (inBorrowMenu) {
@@ -181,6 +169,90 @@ public class LibraryManagementSystem {
                 case 4:
                     inSearchMenu = false; // Return to main menu
                     break;
+            }
+        }
+    }
+
+    private void deleteBook() {
+        bookCollection.printList();
+        if (!bookCollection.isEmpty()) { // Check if the collection is not empty
+            System.out.println("Enter the position of the book you want to delete: ");
+            bookCollection.printList();
+            int position = getIntInput("Position: ");
+            if (position > 0 && position <= bookCollection.size()) {
+                bookCollection.deleteBook(bookCollection.getBook(position).getIsbn());
+                System.out.println("Book deleted successfully.");
+            } else {
+                System.out.println("Invalid book position. Please enter a valid position.");
+            }
+        }
+    }
+
+    private boolean isBookCollectionEmpty() {
+        return bookCollection.isEmpty();
+    }
+
+    private void addBook() {
+        System.out.println("Enter book details:");
+        String title = getStringInput("Title: ");
+        String author = getStringInput("Author: ");
+        String ISBN = getStringInput("ISBN: ");
+        Book newBook = new Book(title, author, ISBN);
+        bookCollection.addFirst(newBook);
+        System.out.println("Book added successfully!");
+    }
+
+    private void borrowBook() {
+        if (isBookCollectionEmpty()) {
+            System.out.println("There are no books to borrow.");
+            return;
+        }
+        String userName = getStringInput("Enter user name: ");
+        // Display book collection
+        bookCollection.printList();
+        int position = getIntInput("Enter book position: ");
+        Book book = bookCollection.getBook(position);
+        if (book != null) {
+            borrowReturnSystem.addBorrowRequest(userName, book);
+            System.out.println("Borrow request added.");
+        } else {
+            System.out.println("Invalid book position.");
+        }
+    }
+
+    private void returnBook() {
+        if (isBookCollectionEmpty()) {
+            System.out.println("There are no books to return.");
+            return;
+        }
+        String userName = getStringInput("Enter user name: ");
+        // Display book collection
+        bookCollection.printList();
+        int position = getIntInput("Enter book position: ");
+        Book book = bookCollection.getBook(position);
+        if (book != null) {
+            borrowReturnSystem.addReturnRequest(userName, book);
+            System.out.println("Return request added.");
+        } else {
+            System.out.println("Invalid book position.");
+        }
+    }
+
+    private String getStringInput(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
+    }
+
+    private int getIntInput(String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            try {
+                int input = scanner.nextInt();
+                scanner.nextLine(); // Consume newline left-over
+                return input;
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a number.");
+                scanner.next(); // Clear the invalid input from the scanner
             }
         }
     }
@@ -319,68 +391,4 @@ public class LibraryManagementSystem {
         System.out.println();
     }
 
-    private void addBook() {
-        System.out.println("Enter book details:");
-        String title = getStringInput("Title: ");
-        String author = getStringInput("Author: ");
-        String ISBN = getStringInput("ISBN: ");
-        Book newBook = new Book(title, author, ISBN);
-        bookCollection.addFirst(newBook);
-        System.out.println("Book added successfully!");
-    }
-
-    private void borrowBook() {
-        if (isBookCollectionEmpty()) {
-            System.out.println("There are no books to borrow.");
-            return;
-        }
-        String userName = getStringInput("Enter user name: ");
-        // Display book collection
-        bookCollection.printList();
-        int position = getIntInput("Enter book position: ");
-        Book book = bookCollection.getBook(position);
-        if (book != null) {
-            borrowReturnSystem.addBorrowRequest(userName, book);
-            System.out.println("Borrow request added.");
-        } else {
-            System.out.println("Invalid book position.");
-        }
-    }
-
-    private void returnBook() {
-        if (isBookCollectionEmpty()) {
-            System.out.println("There are no books to return.");
-            return;
-        }
-        String userName = getStringInput("Enter user name: ");
-        // Display book collection
-        bookCollection.printList();
-        int position = getIntInput("Enter book position: ");
-        Book book = bookCollection.getBook(position);
-        if (book != null) {
-            borrowReturnSystem.addReturnRequest(userName, book);
-            System.out.println("Return request added.");
-        } else {
-            System.out.println("Invalid book position.");
-        }
-    }
-
-    private String getStringInput(String prompt) {
-        System.out.print(prompt);
-        return scanner.nextLine();
-    }
-
-    private int getIntInput(String prompt) {
-        while (true) {
-            System.out.print(prompt);
-            try {
-                int input = scanner.nextInt();
-                scanner.nextLine(); // Consume newline left-over
-                return input;
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a number.");
-                scanner.next(); // Clear the invalid input from the scanner
-            }
-        }
-    }
 }
