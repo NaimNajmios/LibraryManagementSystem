@@ -1,6 +1,7 @@
 package librarymanagementsystem;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class LibraryManagementSystem {
@@ -22,7 +23,7 @@ public class LibraryManagementSystem {
         Book objBook2 = new Book("To Kill a Mockingbird", "Harper Lee", "9780446310789");
         Book objBook3 = new Book("Pride and Prejudice", "Jane Austen", "9780140430723");
         Book objBook4 = new Book("The Catcher in the Rye", "J.D. Salinger", "9780316769535");
-        Book objBook5 = new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780439136365");
+        Book objBook5 = new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780439136366");
         Book objBook6 = new Book("The Hobbit", "J.R.R. Tolkien", "9780439136365");
         Book objBook7 = new Book("The Alchemist", "Paulo Coelho", "9780061122415");
 
@@ -56,8 +57,7 @@ public class LibraryManagementSystem {
                     handleBorrowMenu();
                     break;
                 case 3:
-                    handleSortedBookCollectionMenu();
-                    break;
+                    handleSortMenu();
                 case 7:
                     running = false;
                     break;
@@ -133,24 +133,79 @@ public class LibraryManagementSystem {
         }
     }
 
-    public void handleSortedBookCollectionMenu() {
-        boolean inSortedBookMenu = true;
-        while (inSortedBookMenu) {
-            printSortedBookCollectionMenu();
-            int sortedChoice = getIntInput("Enter your choice: ");
-
-            switch (sortedChoice) {
+    // Handle sort menu
+    private void handleSortMenu() {
+        boolean inSortMenu = true;
+        while (inSortMenu) {
+            printSortMenu();
+            int sortChoice = getIntInput("Enter your choice: ");
+            switch (sortChoice) {
                 case 1:
+                    quickSortBooks();
                     break;
                 case 2:
+                    bubbleSortBooks();
                     break;
                 case 3:
-                    inSortedBookMenu = false; // Return to main menu
+                    mergeSortBooks();
                     break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
+                case 4:
+                    inSortMenu = false; // Return to main menu
+                    break;
             }
         }
+    }
+
+    private void quickSortBooks() {
+        List<Book> booksToSort = bookCollection.getBookList();
+        SortBook sorter = new SortBook();
+        System.out.println("\nBefore Sort:");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+        sorter.quickSort(booksToSort, 0, booksToSort.size() - 1);
+        System.out.println("\nSorted List (Quick Sort):");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+    }
+
+    private void bubbleSortBooks() {
+        List<Book> booksToSort = bookCollection.getBookList();
+        SortBook sorter = new SortBook();
+        System.out.println("\nBefore Sort:");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+        sorter.bubbleSort(booksToSort);
+        System.out.println("\nSorted List (Bubble Sort):");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+    }
+
+    private void mergeSortBooks() {
+        List<Book> booksToSort = bookCollection.getBookList();
+        SortBook sorter = new SortBook();
+        System.out.println("\nBefore Sort:");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+        sorter.mergeSort(booksToSort);
+        System.out.println("\nSorted List (Merge Sort):");
+        for (Book book : booksToSort) {
+            System.out.println(book.toString());
+        }
+    }
+
+    private void printSortMenu() {
+        System.out.println();
+        System.out.println("Sort Menu:");
+        System.out.println("1. Quick Sort");
+        System.out.println("2. Bubble Sort");
+        System.out.println("3. Merge Sort");
+        System.out.println("4. Back to Main Menu");
+        System.out.println();
     }
 
     private void printWelcomeMessage() {
@@ -165,7 +220,7 @@ public class LibraryManagementSystem {
         System.out.println("Main Menu:");
         System.out.println("1. Manage Book Collection");
         System.out.println("2. Borrow & Return system");
-        System.out.println("3. Sorted Display Book Collection");
+        System.out.println("3. Sort Book");
         System.out.println("7. Exit");
         System.out.println();
     }
@@ -188,15 +243,6 @@ public class LibraryManagementSystem {
         System.out.println("3. Display Borrowing Requests");
         System.out.println("4. Display Return Requests");
         System.out.println("5. Main Menu");
-        System.out.println();
-    }
-
-    private void printSortedBookCollectionMenu() {
-        System.out.println();
-        System.out.println("Sorted Book Collection Menu:");
-        System.out.println("1. Quick Sort");
-        System.out.println("2. Merge Sort");
-        System.out.println("3. Main Menu");
         System.out.println();
     }
 

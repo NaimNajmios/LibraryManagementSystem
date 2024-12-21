@@ -1,5 +1,8 @@
 package librarymanagementsystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BookCollection {
 
     private Node first; // Head node of the linked list
@@ -145,26 +148,14 @@ public class BookCollection {
         return sb.toString();
     }
 
-    // Nested Node class
-    public class Node {
-        private Book book;
-        private Node next;
-
-        public Node(Book book) {
-            this.book = book;
-            this.next = null;
+    public List<Book> getBookList() {
+        List<Book> bookList = new ArrayList<>();
+        Node current = first;
+        while (current != null) {
+            bookList.add(current.getBook());
+            current = current.getNextNode();
         }
-
-        public Book getBook() {
-            return book;
-        }
-
-        public Node getNextNode() {
-            return next;
-        }
-
-        public void setNextNode(Node next) {
-            this.next = next;
-        }
+        return bookList;
     }
+
 }

@@ -1,158 +1,123 @@
 package librarymanagementsystem;
 
+import java.util.ArrayList;
+import java.util.List;
+/*
+Quick Sort will sort by ISBN
+Bubble Sort will sort by Author
+Merge Sort should sort by Title (failed)
+*/
+
 public class SortBook {
 
-    // Method to sort a linked list using bubble sort
-    public static void bubbleSort(BookCollection collection) {
-        // bubble sort
-        int n = collection.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                // Swap the nodes
-                if (collection.getBookAtNode(j).getTitle().compareTo(collection.getBookAtNode(j + 1).getTitle()) > 0) {
-                    Book tempNode = collection.getFirstBook();
-                    for (int k = 0; k < j; k++) {
-                        tempNode = tempNode.right;
-                    }
-                    // Update iNode for the next iteration
-                    Book nextNode = tempNode.right;
-                    // Swap the nodes
-                    tempNode.right = nextNode.right;
-                    nextNode.right = tempNode;
-                }
-            }
-        }
-    }
-
-    // Method to sort a linked list using bubble sort, return book collection
-    public static BookCollection collectionBubbleSort(BookCollection collection) {
-        bubbleSort(collection);
-        return collection;
-    }
-
-    // Method to sort a linked list using quick sort
-    public static void quickSort(BookCollection collection, int low, int high) {
+    public void quickSort(List<Book> books, int low, int high) {
         if (low < high) {
-            // pi is partitioning index, arr[p] is now at right place
-            int pi = partition(collection, low, high);
-            // Recursively sort elements before and after partition
-            quickSort(collection, low, pi - 1);
-            quickSort(collection, pi + 1, high);
+            int pi = partition(books, low, high);
+
+            quickSort(books, low, pi - 1);
+            quickSort(books, pi + 1, high);
         }
     }
+    
+    
+    private int partition(List<Book> books, int low, int high) {
+        String pivot = books.get(high).getIsbn();
+        int i = (low - 1);
 
-    // Partition for quickSort
-    private static int partition(BookCollection collection, int low, int high) {
-        // pivot
-        Book pivotNode = collection.getFirstBook();
-        for (int i = 0; i < high; i++) {
-            pivotNode = pivotNode.right;
-        }
-        // iNode
-        Book iNode = collection.getFirstBook();
-        for (int i = 0; i < low - 1; i++) {
-            iNode = iNode.right;
-        }
-        int i = low - 1;
-        for (int j = low; j <= high - 1; j++) {
-            Book jNode = collection.getFirstBook();
-            for (int k = 0; k < j; k++) {
-                jNode = jNode.right;
-            }
-            // If current element is smaller than or equal to pivot
-            if (jNode.getTitle().compareTo(pivotNode.getTitle()) <= 0) {
+        for (int j = low; j < high; j++) {
+            if (books.get(j).getIsbn().compareTo(pivot) <= 0) {
                 i++;
-                // Swap the nodes
-                Book tempNode = iNode;
-                iNode = jNode;
-                jNode = tempNode;
-                // Update iNode for the next iteration
-                iNode = iNode.right;
+
+                // Swap arr[i] and arr[j]
+                Book temp = books.get(i);
+                books.set(i, books.get(j));
+                books.set(j, temp);
             }
         }
 
-        // Swap the pivot with the element at index i+1
-        Book tempNode = iNode;
-        // Update iNode for the next iteration
-        iNode = pivotNode;
-        // Swap the nodes
-        pivotNode = tempNode;
+        // Swap arr[i+1] and arr[high] (or pivot)
+        Book temp = books.get(i + 1);
+        books.set(i + 1, books.get(high));
+        books.set(high, temp);
+
         return i + 1;
     }
 
-    public static void mergeSort(BookCollection collection) {
-        mergeSortHelper(collection.getFirstBook());
-    }
-
-    /**
-     * mergeSortHelper:
-     * Recursively divides the linked list into two halves.
-     * Sorts each half recursively.
-     * Merges the sorted halves using the merge method.
-     **/
-    private static Book mergeSortHelper(Book head) {
-        // base case
-        if (head == null || head.right == null) {
-            return head;
-        }
-        // divide
-        Book middle = getMiddle(head);
-        Book left = head;
-        Book right = middle.right;
-        middle.right = null;
-        // sort
-        left = mergeSortHelper(left);
-        right = mergeSortHelper(right);
-        // merge
-        return merge(left, right);
-    }
-
-    /**
-     * getMiddle:
-     * Finds the middle node of the linked list using the slow-fast pointer
-     * technique
-     */
-
-    private static Book getMiddle(Book head) {
-        // base case
-        if (head == null) {
-            return head;
-        }
-
-        // divide
-        Book slow = head, fast = head.right;
-        while (fast != null && fast.right != null) {
-            slow = slow.right;
-            fast = fast.right.right;
-        }
-        return slow;
-    }
-
-    /**
-     * merge:
-     * Creates a dummy node to act as the head of the merged list.
-     * Compares the titles of the current nodes in the left and right lists.
-     * Adds the node with the smaller title to the merged list.
-     * Moves the pointer of the list from which the node was taken.
-     * Continues until one of the lists becomes empty.
-     * Appends the remaining nodes of the non-empty list to the merged list.
-     */
-
-    private static Book merge(Book left, Book right) {
-        Book dummyHead = new Book();
-        Book tail = dummyHead;
-
-        while (left != null && right != null) {
-            if (left.getTitle().compareTo(right.getTitle()) <= 0) {
-                tail.right = left;
-                left = left.right;
-            } else {
-                tail.right = right;
-                right = right.right;
+    public void bubbleSort(List<Book> books) {
+    int n = books.size();
+    boolean swapped;
+    for (int i = 0; i < n - 1; i++) {
+        swapped = false;
+        for (int j = 0; j < n - i - 1; j++) {
+            if (books.get(j).getAuthor().compareTo(books.get(j + 1).getIsbn()) > 0) {
+                // Swap arr[j] and arr[j+1]
+                Book temp = books.get(j);
+                books.set(j, books.get(j + 1));
+                books.set(j + 1, temp);
+                swapped = true;
             }
-            tail = tail.right;
         }
-        tail.right = left != null ? left : right;
-        return dummyHead.right;
+
+        // If no two elements were swapped by inner loop, then break
+        if (!swapped)
+            break;
+    }
+}
+    
+    public void mergeSort(List<Book> books) {
+        mergeSortHelper(books, 0, books.size() - 1);
+    }
+
+    private void mergeSortHelper(List<Book> books, int left, int right) {
+        if (left < right) {
+            int mid = left + (right - left) / 2;
+
+            mergeSortHelper(books, left, mid);
+            mergeSortHelper(books, mid + 1, right);
+
+            merge(books, left, mid, right);
+        }
+    }
+
+    private void merge(List<Book> books, int left, int mid, int right) {
+        int n1 = mid - left + 1;
+        int n2 = right - mid;
+
+        // Create temporary arrays
+        List<Book> leftArray = new ArrayList<>(n1);
+        List<Book> rightArray = new ArrayList<>(n2);
+
+        // Copy data to temporary arrays
+        for (int i = 0; i < n1; ++i)
+            leftArray.add(books.get(left + i));
+        for (int j = 0; j < n2; ++j)
+            rightArray.add(books.get(mid + 1 + j));
+
+        // Merge the temporary arrays back into books[left..right]
+        int i = 0, j = 0, k = left;
+        while (i < n1 && j < n2) {
+            if (leftArray.get(i).getTitle().compareTo(rightArray.get(j).getTitle()) <= 0) {
+                books.set(k, leftArray.get(i));
+                i++;
+            } else {
+                books.set(k, rightArray.get(j));
+                j++;
+            }
+            k++;
+        }
+
+        // Copy the remaining elements of left[], if there are any
+        while (i < n1) {
+            books.set(k, leftArray.get(i));
+            i++;
+            k++;
+        }
+
+        // Copy the remaining elements of right[], if there are any
+        while (j < n2) {
+            books.set(k, rightArray.get(j));
+            j++;
+            k++;
+        }
     }
 }
