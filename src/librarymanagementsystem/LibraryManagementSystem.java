@@ -99,6 +99,29 @@ public class LibraryManagementSystem {
         }
     }
 
+    // Handle search book menu
+    private void handleSearchBookMenu() {
+        boolean inSearchMenu = true;
+        while (inSearchMenu) {
+            printSearchBookMenu();
+            int searchChoice = getIntInput("Enter your choice: ");
+            switch (searchChoice) {
+                case 1:
+                    searchBookByISBN();
+                    break;
+                case 2:
+                    searchBookByTitle();
+                    break;
+                case 3:
+                    searchBookByAuthor();
+                    break;
+                case 4:
+                    inSearchMenu = false; // Return to main menu
+                    break;
+            }
+        }
+    }
+
     private void handleBorrowMenu() {
         boolean inBorrowMenu = true;
         while (inBorrowMenu) {
@@ -113,12 +136,18 @@ public class LibraryManagementSystem {
                     returnBook();
                     break;
                 case 3:
-                    borrowReturnSystem.displayBorrowPendingRequests();
+                    displayBorrowRequests();
                     break;
                 case 4:
-                    borrowReturnSystem.displayReturnPendingRequests();
+                    displayReturnRequests();
                     break;
                 case 5:
+                    processBorrowRequests();
+                    break;
+                case 6:
+                    processReturnRequests();
+                    break;
+                case 7:
                     inBorrowMenu = false; // Return to main menu
                     break;
                 default:
@@ -150,27 +179,65 @@ public class LibraryManagementSystem {
         }
     }
 
-    // Handle search book menu
-    private void handleSearchBookMenu() {
-        boolean inSearchMenu = true;
-        while (inSearchMenu) {
-            printSearchBookMenu();
-            int searchChoice = getIntInput("Enter your choice: ");
-            switch (searchChoice) {
-                case 1:
-                    searchBookByISBN();
-                    break;
-                case 2:
-                    searchBookByTitle();
-                    break;
-                case 3:
-                    searchBookByAuthor();
-                    break;
-                case 4:
-                    inSearchMenu = false; // Return to main menu
-                    break;
-            }
-        }
+    private void printWelcomeMessage() {
+        System.out.println("------------------------------------------------");
+        System.out.println("Welcome to the Library Management System");
+        System.out.println("------------------------------------------------");
+        System.out.println();
+    }
+
+    private void printMainMenu() {
+        System.out.println();
+        System.out.println("Main Menu:");
+        System.out.println("1. Manage Book Collection");
+        System.out.println("2. Search Book");
+        System.out.println("3. Borrow & Return system");
+        System.out.println("4. Sort Book");
+        System.out.println("7. Exit");
+        System.out.println();
+    }
+
+    private void printSortMenu() {
+        System.out.println();
+        System.out.println("Sort Menu:");
+        System.out.println("1. Quick Sort");
+        System.out.println("2. Bubble Sort");
+        System.out.println("3. Merge Sort");
+        System.out.println("4. Back to Main Menu");
+        System.out.println();
+    }
+
+    private void printBookCollectionMenu() {
+        System.out.println();
+        System.out.println("Book Collection Menu:");
+        System.out.println("1. Add Book");
+        System.out.println("2. Delete Book");
+        System.out.println("3. Display Book Collection");
+        System.out.println("4. Main Menu");
+        System.out.println();
+    }
+
+    private void printBorrowMenu() {
+        System.out.println();
+        System.out.println("Borrow/Return Menu:");
+        System.out.println("1. Borrow book");
+        System.out.println("2. Return book");
+        System.out.println("3. Display Borrowing Requests");
+        System.out.println("4. Display Return Requests");
+        System.out.println("5. Accept Borrow Request");
+        System.out.println("6. Accept Return Request");
+        System.out.println("7. Main Menu");
+        System.out.println();
+    }
+
+    private void printSearchBookMenu() {
+        System.out.println();
+        System.out.println("Search Book Menu:");
+        System.out.println("1. Search by ISBN");
+        System.out.println("2. Search by Title");
+        System.out.println("3. Search by Author");
+        System.out.println("4. Main Menu");
+        System.out.println();
     }
 
     private void deleteBook() {
@@ -236,6 +303,26 @@ public class LibraryManagementSystem {
         } else {
             System.out.println("Invalid book position.");
         }
+    }
+
+    // Display Borrowing Requests
+    private void displayBorrowRequests() {
+        borrowReturnSystem.displayBorrowPendingRequests();
+    }
+
+    // Display Return Requests
+    private void displayReturnRequests() {
+        borrowReturnSystem.displayReturnPendingRequests();
+    }
+
+    // Process borrow requests
+    private void processBorrowRequests() {
+        borrowReturnSystem.processBorrowRequest();
+    }
+
+    // Process return requests
+    private void processReturnRequests() {
+        borrowReturnSystem.processReturnRequest();
     }
 
     private String getStringInput(String prompt) {
@@ -330,65 +417,6 @@ public class LibraryManagementSystem {
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
-    }
-
-    private void printWelcomeMessage() {
-        System.out.println("------------------------------------------------");
-        System.out.println("Welcome to the Library Management System");
-        System.out.println("------------------------------------------------");
-        System.out.println();
-    }
-
-    private void printMainMenu() {
-        System.out.println();
-        System.out.println("Main Menu:");
-        System.out.println("1. Manage Book Collection");
-        System.out.println("2. Search Book");
-        System.out.println("3. Borrow & Return system");
-        System.out.println("4. Sort Book");
-        System.out.println("7. Exit");
-        System.out.println();
-    }
-
-    private void printSortMenu() {
-        System.out.println();
-        System.out.println("Sort Menu:");
-        System.out.println("1. Quick Sort");
-        System.out.println("2. Bubble Sort");
-        System.out.println("3. Merge Sort");
-        System.out.println("4. Back to Main Menu");
-        System.out.println();
-    }
-
-    private void printBookCollectionMenu() {
-        System.out.println();
-        System.out.println("Book Collection Menu:");
-        System.out.println("1. Add Book");
-        System.out.println("2. Delete Book");
-        System.out.println("3. Display Book Collection");
-        System.out.println("4. Main Menu");
-        System.out.println();
-    }
-
-    private void printBorrowMenu() {
-        System.out.println();
-        System.out.println("Borrow/Return Menu:");
-        System.out.println("1. Borrow book");
-        System.out.println("2. Return book");
-        System.out.println("3. Display Borrowing Requests");
-        System.out.println("4. Display Return Requests");
-        System.out.println("5. Main Menu");
-        System.out.println();
-    }
-
-    private void printSearchBookMenu() {
-        System.out.println();
-        System.out.println("Search Book Menu:");
-        System.out.println("1. Search by ISBN");
-        System.out.println("2. Search by Title");
-        System.out.println("3. Search by Author");
-        System.out.println("4. Main Menu");
-        System.out.println();
     }
 
 }
