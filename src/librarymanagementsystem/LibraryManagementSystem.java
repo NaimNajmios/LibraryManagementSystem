@@ -10,6 +10,8 @@ public class LibraryManagementSystem {
     private final BorrowReturnSystem borrowReturnSystem;
     private final BookSearch searcher;
     private final Scanner scanner;
+    String bookDetail = String.format("| %-30s | %-25s | %-13s |", "Title", "Author", "ISBN");
+    String userDetail = String.format("| %-30s | %-25s |", "Visitor", "Book");
 
     public LibraryManagementSystem() {
         bookCollection = new BookCollection();
@@ -20,6 +22,7 @@ public class LibraryManagementSystem {
     }
 
     private void initializeBooks() {
+        
         // Instantiate 10 books
         Book objBook = new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565");
         Book objBook2 = new Book("To Kill a Mockingbird", "Harper Lee", "9780446310789");
@@ -28,6 +31,13 @@ public class LibraryManagementSystem {
         Book objBook5 = new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780439136366");
         Book objBook6 = new Book("The Hobbit", "J.R.R. Tolkien", "9780439136365");
         Book objBook7 = new Book("The Alchemist", "Paulo Coelho", "9780061122415");
+
+        // User borrow and return
+        borrowReturnSystem.addBorrowRequest("John Doe", objBook);
+        borrowReturnSystem.addBorrowRequest("Jane Smith", objBook2);
+
+        borrowReturnSystem.addReturnRequest("Adam Bryant", objBook3);
+        borrowReturnSystem.addReturnRequest("Helen Osborne", objBook4);
 
         bookCollection.addFirst(objBook);
         bookCollection.addFirst(objBook2);
@@ -88,7 +98,7 @@ public class LibraryManagementSystem {
                     deleteBook();
                     break;
                 case 3:
-                    bookCollection.printList();
+                    displayBookCollection();
                     break;
                 case 4:
                     inBookMenu = false; // Return to main menu
@@ -240,21 +250,6 @@ public class LibraryManagementSystem {
         System.out.println();
     }
 
-    private void deleteBook() {
-        bookCollection.printList();
-        if (!bookCollection.isEmpty()) { // Check if the collection is not empty
-            System.out.println("Enter the position of the book you want to delete: ");
-            bookCollection.printList();
-            int position = getIntInput("Position: ");
-            if (position > 0 && position <= bookCollection.size()) {
-                bookCollection.deleteBook(bookCollection.getBook(position).getIsbn());
-                System.out.println("Book deleted successfully.");
-            } else {
-                System.out.println("Invalid book position. Please enter a valid position.");
-            }
-        }
-    }
-
     private boolean isBookCollectionEmpty() {
         return bookCollection.isEmpty();
     }
@@ -266,7 +261,31 @@ public class LibraryManagementSystem {
         String ISBN = getStringInput("ISBN: ");
         Book newBook = new Book(title, author, ISBN);
         bookCollection.addFirst(newBook);
+        System.out.println(bookDetail);
+        newBook.toString();
         System.out.println("Book added successfully!");
+    }
+
+    private void deleteBook() {
+        bookCollection.printList();
+        if (!bookCollection.isEmpty()) { // Check if the collection is not empty
+            System.out.println("Enter the position of the book you want to delete: ");
+            displayBookCollection();
+            int position = getIntInput("Position: ");
+            if (position > 0 && position <= bookCollection.size()) {
+                bookCollection.deleteBook(bookCollection.getBook(position).getIsbn());
+                System.out.println("Book deleted successfully.");
+            } else {
+                System.out.println("Invalid book position. Please enter a valid position.");
+            }
+        }
+    }
+
+    // Method to display the book collection
+    private void displayBookCollection() {
+        System.out.println("\nBook Collection:");
+        System.out.println(bookDetail);
+        bookCollection.printList();
     }
 
     private void borrowBook() {
@@ -276,7 +295,7 @@ public class LibraryManagementSystem {
         }
         String userName = getStringInput("Enter user name: ");
         // Display book collection
-        bookCollection.printList();
+        displayBookCollection();
         int position = getIntInput("Enter book position: ");
         Book book = bookCollection.getBook(position);
         if (book != null) {
@@ -294,7 +313,7 @@ public class LibraryManagementSystem {
         }
         String userName = getStringInput("Enter user name: ");
         // Display book collection
-        bookCollection.printList();
+        displayBookCollection();
         int position = getIntInput("Enter book position: ");
         Book book = bookCollection.getBook(position);
         if (book != null) {
@@ -307,22 +326,42 @@ public class LibraryManagementSystem {
 
     // Display Borrowing Requests
     private void displayBorrowRequests() {
+        System.out.println("\nBorrowing Requests:");
+        System.out.println(userDetail);
         borrowReturnSystem.displayBorrowPendingRequests();
     }
 
     // Display Return Requests
     private void displayReturnRequests() {
+        System.out.println("\nReturn Requests:");
+        System.out.println(userDetail);
         borrowReturnSystem.displayReturnPendingRequests();
     }
 
     // Process borrow requests
     private void processBorrowRequests() {
+        System.out.println("\nBorrowing Requests:");
+        System.out.println(userDetail);
+        borrowReturnSystem.displayBorrowPendingRequests();
+        System.out.println();
+
         borrowReturnSystem.processBorrowRequest();
+        System.out.println("\nUpdated Borrowing Requests:");
+        System.out.println(userDetail);
+        borrowReturnSystem.displayBorrowPendingRequests();
     }
 
     // Process return requests
     private void processReturnRequests() {
+        System.out.println("\nReturn Requests:");
+        System.out.println(userDetail);
+        borrowReturnSystem.displayReturnPendingRequests();
+        System.out.println();
+
         borrowReturnSystem.processReturnRequest();
+        System.out.println("\nUpdated Return Requests:");
+        System.out.println(userDetail);
+        borrowReturnSystem.displayReturnPendingRequests();
     }
 
     private String getStringInput(String prompt) {
@@ -344,25 +383,29 @@ public class LibraryManagementSystem {
         }
     }
 
-    // Handle search book menu by ISBN
-    private void searchBookByISBN() {
-        String isbn = scanner.nextLine();
-        Book book = searcher.searchISBN(isbn);
-        if (book != null) {
-            System.out.println("Book found: " + book.toString());
-        } else {
-            System.out.println("Book not found.");
-        }
-    }
-
     // Handle search book menu by title
     private void searchBookByTitle() {
         String title = scanner.nextLine();
         Book book = searcher.searchTitle(title);
         if (book != null) {
-            System.out.println("Book found: " + book.toString());
+            System.out.println("\nBook found: ");
+            System.out.println(bookDetail);
+            System.out.println(book.toString());
         } else {
-            System.out.println("Book not found.");
+            System.out.println("\nBook not found.");
+        }
+    }
+
+    // Handle search book menu by ISBN
+    private void searchBookByISBN() {
+        String isbn = scanner.nextLine();
+        Book book = searcher.searchISBN(isbn);
+        if (book != null) {
+            System.out.println("\nBook found: ");
+            System.out.println(bookDetail);
+            System.out.println(book.toString());
+        } else {
+            System.out.println("\nBook not found.");
         }
     }
 
@@ -371,9 +414,11 @@ public class LibraryManagementSystem {
         String author = scanner.nextLine();
         Book book = searcher.searchAuthor(author);
         if (book != null) {
-            System.out.println("Book found: " + book.toString());
+            System.out.println("\nBook found: ");
+            System.out.println(bookDetail);
+            System.out.println(book.toString());
         } else {
-            System.out.println("Book not found.");
+            System.out.println("\nBook not found.");
         }
     }
 
@@ -381,11 +426,13 @@ public class LibraryManagementSystem {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
         System.out.println("\nBefore Sort:");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
         sorter.quickSort(booksToSort, 0, booksToSort.size() - 1);
         System.out.println("\nSorted List (Quick Sort):");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
@@ -395,11 +442,13 @@ public class LibraryManagementSystem {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
         System.out.println("\nBefore Sort:");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
         sorter.bubbleSort(booksToSort);
         System.out.println("\nSorted List (Bubble Sort):");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
@@ -409,11 +458,13 @@ public class LibraryManagementSystem {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
         System.out.println("\nBefore Sort:");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
         sorter.mergeSort(booksToSort);
         System.out.println("\nSorted List (Merge Sort):");
+        System.out.println(bookDetail);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }

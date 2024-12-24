@@ -46,7 +46,7 @@ public class Book {
     }
 
     public String toString() {
-        return "\nTitle: " + this.title + "\nAuthor: " + this.author + "\nISBN: " + this.isbn;
+        return String.format("| %-30s | %-25s | %-13s |", this.title, this.author, this.isbn);
     }
 
 

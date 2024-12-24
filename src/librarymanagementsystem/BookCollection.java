@@ -44,11 +44,9 @@ public class BookCollection {
             return;
         }
         Node current = first;
-        int count = 1;
         while (current != null) {
-            System.out.println(count + ". " + current.getBook().toString());
+            System.out.println(current.getBook().toString());
             current = current.getNextNode();
-            count++;
         }
     }
 

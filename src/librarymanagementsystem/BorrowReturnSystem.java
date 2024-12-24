@@ -33,7 +33,7 @@ class BorrowingReturn {
 
     // ToString method
     public String toString() {
-        return "User: " + user + "\nBook: \n" + book.getTitle();
+        return String.format("| %-30s | %-25s |", this.user, this.book.getTitle());
     }
 
 }
@@ -69,7 +69,7 @@ class ReturningBook {
 
     // ToString method
     public String toString() {
-        return "User: " + user + "\nBook: \n" + book.getTitle();
+        return String.format("| %-30s | %-25s |", this.user, this.book.getTitle());
     }
 
 }
@@ -114,8 +114,6 @@ public class BorrowReturnSystem {
         if (borrowList.isEmpty()) {
             System.out.println("No pending borrow requests.");
         } else {
-            // Print a message
-            System.out.println("Pending Borrow Requests:\n");
             for (BorrowingReturn borrowRequest : borrowList) {
                 System.out.println(borrowRequest);
             }
@@ -150,8 +148,6 @@ public class BorrowReturnSystem {
         if (returnList.isEmpty()) {
             System.out.println("No pending return requests.");
         } else {
-            // Print a message
-            System.out.println("Pending return Requests:\n");
             for (ReturningBook request : returnList) {
                 System.out.println(request);
             }
