@@ -6,10 +6,11 @@ import java.util.Scanner;
 
 public class LibraryManagementSystem {
 
-    private final BookCollection bookCollection;
-    private final BorrowReturnSystem borrowReturnSystem;
-    private final BookSearch searcher;
-    private final Scanner scanner;
+    private BookCollection bookCollection;
+    private BorrowReturnSystem borrowReturnSystem;
+    private BookSearch searcher;
+    private BookRecommendation bookRecommendation;
+    private Scanner scanner;
     String bookDetail = String.format("%s| %-30s | %-25s | %-13s |", "No.", "Title", "Author", "ISBN");
     String bookDetailWONumber = String.format("%-30s | %-25s | %-13s |", "Title", "Author", "ISBN");
     String userDetail = String.format("| %-30s | %-25s |", "Visitor", "Book");
@@ -46,6 +47,8 @@ public class LibraryManagementSystem {
                 case 4:
                     handleSortMenu();
                     break;
+                case 5:
+                    handleRecommendationMenu();
                 case 7:
                     running = false;
                     break;
@@ -161,6 +164,24 @@ public class LibraryManagementSystem {
         }
     }
 
+    private void handleRecommendationMenu() {
+        boolean inRecommendationMenu = true;
+        while (inRecommendationMenu) {
+            printBookRecommendationMenu();
+            int recommendationChoice = getIntInput("Enter your choice: ");
+            switch (recommendationChoice) {
+                case 1:
+                    recommendBooksByUser();
+                    break;
+                case 2:
+                    inRecommendationMenu = false; // Return to main menu
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+        }
+    }
+
     private void printWelcomeMessage() {
         System.out.println("------------------------------------------------");
         System.out.println("Welcome to the Library Management System");
@@ -175,6 +196,7 @@ public class LibraryManagementSystem {
         System.out.println("2. Search Book");
         System.out.println("3. Borrow & Return system");
         System.out.println("4. Sort Book");
+        System.out.println("5. Book Recommendation");
         System.out.println("7. Exit");
         System.out.println();
     }
@@ -219,6 +241,14 @@ public class LibraryManagementSystem {
         System.out.println("2. Search by Title");
         System.out.println("3. Search by Author");
         System.out.println("4. Main Menu");
+        System.out.println();
+    }
+
+    private void printBookRecommendationMenu() {
+        System.out.println();
+        System.out.println("Book Recommendation Menu:");
+        System.out.println("1. Book Recommendation By User");
+        System.out.println("2. Main Menu");
         System.out.println();
     }
 
@@ -448,4 +478,20 @@ public class LibraryManagementSystem {
         }
     }
 
+    // Method to recommend books based on user's borrowing history
+    private void recommendBooksByUser() {
+        System.out.println("Enter user name: ");
+        String userName = scanner.nextLine();
+        BookRecommendation bookRecommendation = new BookRecommendation(borrowReturnSystem.getUserInBorrowingList(),
+                borrowReturnSystem.getBookInBorrowingList());
+        List<String> recommendedBooks = bookRecommendation.recommendBooks(userName);
+        if (recommendedBooks != null) {
+            System.out.println("\nRecommended Books for " + userName + ":");
+            for (String book : recommendedBooks) {
+                System.out.println(book);
+            }
+        } else {
+            System.out.println("\nNo recommendations available for " + userName);
+        }
+    }
 }
