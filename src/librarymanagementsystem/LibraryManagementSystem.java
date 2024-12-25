@@ -9,7 +9,6 @@ public class LibraryManagementSystem {
     private BookCollection bookCollection;
     private BorrowReturnSystem borrowReturnSystem;
     private BookSearch searcher;
-    private BookRecommendation bookRecommendation;
     private Scanner scanner;
     String bookDetail = String.format("%s| %-30s | %-25s | %-13s |", "No.", "Title", "Author", "ISBN");
     String bookDetailWONumber = String.format("%-30s | %-25s | %-13s |", "Title", "Author", "ISBN");
@@ -49,6 +48,7 @@ public class LibraryManagementSystem {
                     break;
                 case 5:
                     handleRecommendationMenu();
+                    break;
                 case 7:
                     running = false;
                     break;
