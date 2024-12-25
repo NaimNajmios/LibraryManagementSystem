@@ -10,43 +10,15 @@ public class LibraryManagementSystem {
     private final BorrowReturnSystem borrowReturnSystem;
     private final BookSearch searcher;
     private final Scanner scanner;
-    String bookDetail = String.format("| %-30s | %-25s | %-13s |", "Title", "Author", "ISBN");
+    String bookDetail = String.format("%s| %-30s | %-25s | %-13s |", "No.", "Title", "Author", "ISBN");
+    String bookDetailWONumber = String.format("%-30s | %-25s | %-13s |", "Title", "Author", "ISBN");
     String userDetail = String.format("| %-30s | %-25s |", "Visitor", "Book");
 
     public LibraryManagementSystem() {
         bookCollection = new BookCollection();
         borrowReturnSystem = new BorrowReturnSystem();
         scanner = new Scanner(System.in);
-        initializeBooks();
         searcher = new BookSearch(bookCollection);
-    }
-
-    private void initializeBooks() {
-        
-        // Instantiate 10 books
-        Book objBook = new Book("The Great Gatsby", "F. Scott Fitzgerald", "9780743273565");
-        Book objBook2 = new Book("To Kill a Mockingbird", "Harper Lee", "9780446310789");
-        Book objBook3 = new Book("Pride and Prejudice", "Jane Austen", "9780140430723");
-        Book objBook4 = new Book("The Catcher in the Rye", "J.D. Salinger", "9780316769535");
-        Book objBook5 = new Book("The Lord of the Rings", "J.R.R. Tolkien", "9780439136366");
-        Book objBook6 = new Book("The Hobbit", "J.R.R. Tolkien", "9780439136365");
-        Book objBook7 = new Book("The Alchemist", "Paulo Coelho", "9780061122415");
-
-        // User borrow and return
-        borrowReturnSystem.addBorrowRequest("John Doe", objBook);
-        borrowReturnSystem.addBorrowRequest("Jane Smith", objBook2);
-
-        borrowReturnSystem.addReturnRequest("Adam Bryant", objBook3);
-        borrowReturnSystem.addReturnRequest("Helen Osborne", objBook4);
-
-        bookCollection.addFirst(objBook);
-        bookCollection.addFirst(objBook2);
-        bookCollection.addFirst(objBook3);
-        bookCollection.addFirst(objBook4);
-        bookCollection.addFirst(objBook5);
-        bookCollection.addFirst(objBook6);
-        bookCollection.addFirst(objBook7);
-
     }
 
     public static void main(String[] args) {
@@ -261,9 +233,8 @@ public class LibraryManagementSystem {
         String ISBN = getStringInput("ISBN: ");
         Book newBook = new Book(title, author, ISBN);
         bookCollection.addFirst(newBook);
-        System.out.println(bookDetail);
         newBook.toString();
-        System.out.println("Book added successfully!");
+        System.out.println("\nBook added successfully!");
     }
 
     private void deleteBook() {
@@ -389,7 +360,7 @@ public class LibraryManagementSystem {
         Book book = searcher.searchTitle(title);
         if (book != null) {
             System.out.println("\nBook found: ");
-            System.out.println(bookDetail);
+            System.out.println(bookDetailWONumber);
             System.out.println(book.toString());
         } else {
             System.out.println("\nBook not found.");
@@ -402,7 +373,7 @@ public class LibraryManagementSystem {
         Book book = searcher.searchISBN(isbn);
         if (book != null) {
             System.out.println("\nBook found: ");
-            System.out.println(bookDetail);
+            System.out.println(bookDetailWONumber);
             System.out.println(book.toString());
         } else {
             System.out.println("\nBook not found.");
@@ -415,7 +386,7 @@ public class LibraryManagementSystem {
         Book book = searcher.searchAuthor(author);
         if (book != null) {
             System.out.println("\nBook found: ");
-            System.out.println(bookDetail);
+            System.out.println(bookDetailWONumber);
             System.out.println(book.toString());
         } else {
             System.out.println("\nBook not found.");
@@ -426,13 +397,13 @@ public class LibraryManagementSystem {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
         System.out.println("\nBefore Sort:");
-        System.out.println(bookDetail);
+        System.out.println(bookDetailWONumber);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
         sorter.quickSort(booksToSort, 0, booksToSort.size() - 1);
         System.out.println("\nSorted List (Quick Sort):");
-        System.out.println(bookDetail);
+        System.out.println(bookDetailWONumber);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
@@ -448,7 +419,7 @@ public class LibraryManagementSystem {
         }
         sorter.bubbleSort(booksToSort);
         System.out.println("\nSorted List (Bubble Sort):");
-        System.out.println(bookDetail);
+        System.out.println(bookDetailWONumber);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
@@ -458,13 +429,13 @@ public class LibraryManagementSystem {
         List<Book> booksToSort = bookCollection.getBookList();
         SortBook sorter = new SortBook();
         System.out.println("\nBefore Sort:");
-        System.out.println(bookDetail);
+        System.out.println(bookDetailWONumber);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
         sorter.mergeSort(booksToSort);
         System.out.println("\nSorted List (Merge Sort):");
-        System.out.println(bookDetail);
+        System.out.println(bookDetailWONumber);
         for (Book book : booksToSort) {
             System.out.println(book.toString());
         }
