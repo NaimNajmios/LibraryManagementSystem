@@ -356,12 +356,15 @@ public class LibraryManagementSystem {
 
     // Handle search book menu by title
     private void searchBookByTitle() {
+        System.out.println("Enter book title: ");
         String title = scanner.nextLine();
-        Book book = searcher.searchTitle(title);
+        List<Book> book = searcher.searchAllByTitle(title);
         if (book != null) {
-            System.out.println("\nBook found: ");
+            System.out.println("\nBooks found: ");
             System.out.println(bookDetailWONumber);
-            System.out.println(book.toString());
+            for (Book b : book) {
+                System.out.println(b.toString());
+            }
         } else {
             System.out.println("\nBook not found.");
         }
@@ -369,6 +372,7 @@ public class LibraryManagementSystem {
 
     // Handle search book menu by ISBN
     private void searchBookByISBN() {
+        System.out.println("Enter book ISBN: ");
         String isbn = scanner.nextLine();
         Book book = searcher.searchISBN(isbn);
         if (book != null) {
@@ -382,12 +386,15 @@ public class LibraryManagementSystem {
 
     // Handle search book menu by author
     private void searchBookByAuthor() {
+        System.out.println("Enter author name: ");
         String author = scanner.nextLine();
-        Book book = searcher.searchAuthor(author);
+        List<Book> book = searcher.searchAllByAuthor(author);
         if (book != null) {
-            System.out.println("\nBook found: ");
+            System.out.println("\nBooks found: ");
             System.out.println(bookDetailWONumber);
-            System.out.println(book.toString());
+            for (Book b : book) {
+                System.out.println(b.toString());
+            }
         } else {
             System.out.println("\nBook not found.");
         }

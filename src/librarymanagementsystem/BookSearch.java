@@ -1,5 +1,8 @@
 package librarymanagementsystem;
 
+import java.util.ArrayList;
+import java.util.List;
+
 class BookSearch {
 
     // Instatiate book object
@@ -46,51 +49,52 @@ class BookSearch {
         if (root == null || root.getIsbn().equals(isbn)) {
             return root;
         }
-        if (isbn.compareTo(root.getIsbn()) < 0) {
+        if (isbn.compareTo(root.getIsbn()) < 0) {   
             return searchISBN(root.left, isbn);
         }
         return searchISBN(root.right, isbn);
     }
 
-    // Search by title
-    public Book searchTitle(String title) {
-        return searchTitle(root, title);
+    // Search by title (returns a list of books)
+    public List<Book> searchAllByTitle(String title) {
+        return searchAllByTitle(root, title, new ArrayList<>());
     }
 
-    private Book searchTitle(Book root, String title) {
+    private List<Book> searchAllByTitle(Book root, String title, List<Book> results) {
         if (root == null) {
-            return null;
+            return results; // Return the current results
         }
+
         if (root.getTitle().equals(title)) {
-            return root;
+            results.add(root); // Add the matching book to the results
         }
 
-        Book leftSearch = searchTitle(root.left, title);
-        if (leftSearch != null) {
-            return leftSearch;
-        }
-        return searchTitle(root.right, title);
+        // Continue searching both subtrees regardless of finding a match
+        searchAllByTitle(root.left, title, results);
+        searchAllByTitle(root.right, title, results);
+
+        return results; // Return the accumulated results
     }
 
-    // Search by author
-    public Book searchAuthor(String author) {
-        return searchAuthor(root, author);
+    // Search by author (returns a list of books)
+    public List<Book> searchAllByAuthor(String author) {
+        return searchAllByAuthor(root, author, new ArrayList<>());
     }
 
-    private Book searchAuthor(Book root, String author) {
+    private List<Book> searchAllByAuthor(Book root, String author, List<Book> results) {
         if (root == null) {
-            return null;
+            return results; // Return the current results
         }
+
         if (root.getAuthor().equals(author)) {
-            return root;
+            results.add(root); // Add the matching book to the results
         }
 
-        Book leftSearch = searchAuthor(root.left, author);
-        if (leftSearch != null) {
-            return leftSearch;
-        }
+        // Continue searching both subtrees regardless of finding a match
+        searchAllByAuthor(root.left, author, results);
+        searchAllByAuthor(root.right, author, results);
 
-        return searchAuthor(root.right, author);
+        return results; // Return the accumulated results
     }
 
     // In-order Traversal
